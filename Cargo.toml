@@ -1,0 +1,15 @@
+[package]
+name = "OS-With-Rust"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+# disabling unwinding on dev and release target
+[profile.dev]
+panic="abort"
+
+[profile.release]
+panic="abort"
+
+[dependencies]
