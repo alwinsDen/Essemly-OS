@@ -5,3 +5,7 @@ build-std-features = ["compiler-builtins-mem"]
 
 [build]
 target = "llvm_target_descp.json"
+
+#using cargo run (add .exe extension)
+[target.'cfg(target_os="none")']
+runner = "bootimage runner"
