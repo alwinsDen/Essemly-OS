@@ -3,6 +3,7 @@ use core::fmt::Write;
 use volatile::Volatile;
 use lazy_static::lazy_static;
 use spin::Mutex;
+
 #[allow(dead_code)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(u8)] //each enum variant would be stored as a u8.
@@ -23,6 +24,25 @@ pub enum Color {
     Pink = 13,
     Yellow = 14,
     White = 15,
+}
+
+// creating macros for easier printing
+#[macro_export]
+macro_rules! print {
+    ($($arg:tt)*) => ($crate::vga_buffer::_print(format_args!($($arg)*)));
+}
+
+#[macro_export]
+macro_rules! println {
+    () => ($crate::print!("\n"));
+    ($($arg:tt)*) => ($crate::print!("{}\n", format_args!($($arg)*)));
+}
+
+// to hide from generated documentation
+#[doc(hidden)]
+pub fn _print(args: fmt::Arguments) {
+    use core::fmt::Write;
+    WRITER.lock().write_fmt(args).unwrap();
 }
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]

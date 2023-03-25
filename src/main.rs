@@ -9,8 +9,9 @@ use core::panic::PanicInfo;
 
 //this function is called on panic
 #[panic_handler]
-fn panic(_info: &PanicInfo) -> ! {
-    loop {}
+fn panic(info: &PanicInfo) -> ! {
+    print!("{}",info);
+    loop{}
 }
 
 static HELLO: &[u8] = b"hello world!";
@@ -25,9 +26,13 @@ pub extern "C" fn _start() -> ! {
     //         *vga_buffer.offset(i as isize * 2 + 1) = 0xb;
     //     }
     // }
-    use core::fmt::Write;
-    vga_buffer::WRITER.lock().write_str("Hello again").unwrap();
-    write!(vga_buffer::WRITER.lock(), ", some numbers: {} {}",42,1.337).unwrap();
+    // use core::fmt::Write;
+    // vga_buffer::WRITER.lock().write_str("Hello again").unwrap();
+    // write!(vga_buffer::WRITER.lock(), ", some numbers: {} {}",42,1.337).unwrap();
+
+    //finally using the println macro
+    println!("hello world! {}","Alwin");
+    panic!("This is a test panic!");
     loop {}
 }
 
