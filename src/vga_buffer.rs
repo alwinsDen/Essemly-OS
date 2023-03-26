@@ -145,14 +145,14 @@ lazy_static! {
         }
     });
 }
-pub fn print_something() {
-    let mut writer = Writer {
-        column_position: 0,
-        color_code: ColorCode::new(Color::Yellow, Color::Black),
-        buffer: unsafe { &mut *(0xb8000 as *mut Buffer) },
-    };
-    writer.write_byte(b'H');
-    writer.write_string("ello ");
-    writer.write_string("World! Hey There this ");
-    write!(writer, "The numbers her e is s tes tare {} and {}", 43, 1.0 / 3.0).unwrap();
-}
+// pub fn print_something() {
+//     let mut writer = Writer {
+//         column_position: 0,
+//         color_code: ColorCode::new(Color::Yellow, Color::Black),
+//         buffer: unsafe { &mut *(0xb8000 as *mut Buffer) },
+//     };
+//     writer.write_byte(b'H');
+//     writer.write_string("ello ");
+//     writer.write_string("World! Hey There this ");
+//     write!(writer, "The numbers her e is s tes tare {} and {}", 43, 1.0 / 3.0).unwrap();
+// }
