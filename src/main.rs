@@ -3,9 +3,7 @@
 #![feature(custom_test_frameworks)]
 #![test_runner(crate::test_runner)] //here crate::test_runner is the name of the function.
 #![reexport_test_harness_main = "test_main"]
-
 mod vga_buffer;
-
 use core::fmt::Write;
 //we will not be using main function as the entrypoint
 use core::panic::PanicInfo;
@@ -17,8 +15,22 @@ fn panic(info: &PanicInfo) -> ! {
     loop{}
 }
 
-static HELLO: &[u8] = b"hello world!";
+//exit Qemu function
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[repr(u32)]
+pub enum QemuExitCode{
+    Success = 0x10,
+    Failed = 0x11
+}
+pub fn exit_qemu(exit_code : QemuExitCode) {
+    use x86_64::instructions::port::Port;
+    unsafe {
+        let mut port = Port::new(0xf4);
+        port.write(exit_code as u32);
+    }
+}
 
+static HELLO: &[u8] = b"hello world!";
 #[cfg(test)] //panic = "abort" needs to be commented in toml for 'cargo test' to run.
 fn test_runner(tests: &[&dyn Fn()]) {
     println!("Running {} tests", tests.len());
@@ -26,7 +38,6 @@ fn test_runner(tests: &[&dyn Fn()]) {
         test();
     }
 }
-
 //here are the added test cases.
 //test case 1
 #[test_case]
@@ -35,7 +46,6 @@ fn trivial_assertion(){
     assert_eq!(1,1);
     println!("[Ok]");
 }
-
 #[test_case]
 fn test_2(){
     print!("Test for equality...");
